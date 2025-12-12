@@ -66,6 +66,19 @@ contract Utils {
         return dst;
     }
 
+    function array<uint8> addressToBytes32(address src) public const {
+        // 在 GCL 中，address 需要转换为 bytes32
+        // 由于 GCL 不直接支持 address 到 uint256 的转换，
+        // 我们返回一个填充为零的 32 字节数组
+        array<uint8> dst;
+        dst.set_length(32u32);
+        for (uint32 i = 0u32; i < 32u32; i++) {
+            dst[i] = 0u8;
+        }
+        // 注意：这是一个简化实现，实际应用中可能需要更复杂的地址编码
+        return dst;
+    }
+
     function uint256 bytes32ToUint256(array<uint8> src) public const {
         uint256 dst;
         uint32 len = src.length();
@@ -74,5 +87,22 @@ contract Utils {
             // __debug.print("byte ", i, ": ", src[i], " dst: ", dst);
         }
         return dst;
+    }
+
+    function uint32 reverseUint32(uint32 value) public const {
+        uint32 result;
+        result = ((value & 0x000000FFu32) << 24u32) |
+                 ((value & 0x0000FF00u32) << 8u32) |
+                 ((value & 0x00FF0000u32) >> 8u32) |
+                 ((value & 0xFF000000u32) >> 24u32);
+        return result;
+    }
+
+    function address arrayUint8ToAddress(array<uint8> src) public const {
+        // GCL 中 address 类型不支持从 uint256 直接转换
+        // 这里简化实现，直接返回零地址
+        // 实际使用中应该通过其他方式处理地址转换
+        address result;
+        return result;
     }
 }

@@ -53,7 +53,7 @@ contract AppContract is IContractUsingSDP, Ownable {
 
     function sendUnorderedMessage(string memory receiverDomain, bytes32 receiver, bytes memory message) external {
         ISDPMessage(sdpAddress).sendUnorderedMessage(receiverDomain, receiver, message);
-
+=
         sendMsg[receiver].push(message);
         emit sendCrosschainMsg(receiverDomain, receiver, message, false);
     }
@@ -95,6 +95,14 @@ contract AppContract is IContractUsingSDP, Ownable {
 
     function getLastMsg() public view returns (bytes memory) {
         return last_msg;
+    }
+
+    function getSendMsg(bytes32 receiver) public view returns (bytes[] memory) {
+        return sendMsg[receiver];
+    }
+
+    function getRecvMsg(bytes32 sender) public view returns (bytes[] memory) {
+        return recvMsg[sender];
     }
 
     /**
